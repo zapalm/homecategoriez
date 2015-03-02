@@ -60,8 +60,8 @@ class HomeCategoriez extends Module
 		if (Tools::isSubmit('submit_save'))
 		{
 			$res = 1;
-			foreach ($this->conf_default as $v => $v)
-				$res &= Configuration::updateValue($v, intval(Tools::getValue($v)));
+			foreach ($this->conf_default as $k => $v)
+				$res &= Configuration::updateValue($k, (int)Tools::getValue($k));
 
 			$output .= $res ? $this->displayConfirmation($this->l('Settings updated')) : $this->displayError($this->l('Some setting not updated'));
 		}
