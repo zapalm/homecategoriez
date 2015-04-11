@@ -106,10 +106,13 @@ class HomeCategoriez extends Module
 						<p class="clear">'.$this->l('Input a number of pixels to adjust width of the block of categories.').'</p>
 					</div>
 					<label>'.$this->l('* Only for PrestaShop less then 1.6.').'</label>
-					<center><input type="submit" name="submit_save" value="'.$this->l('Save').'" class="button" /></center>
+					<br class="clear" />
+					<div class="margin-form">
+						<input type="submit" name="submit_save" value="'.$this->l('Save').'" class="button" />
+					</div>
 				</fieldset>
 			</form>
-			<br class="clear">
+			<br class="clear" />
 		';
 
 		return $output;
