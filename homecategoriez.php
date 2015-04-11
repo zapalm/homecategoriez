@@ -95,16 +95,17 @@ class HomeCategoriez extends Module
 						</select>
 						<p class="clear">'.$this->l('Choose a root category (default : Home category).').'</p>
 					</div>
-					<label>'.$this->l('Number of columns to display').'</label>
+					<label>'.$this->l('Number of columns to display').'<sup>*</sup></label>
 					<div class="margin-form">
 						<input type="text" size="1" name="HOMECATEGORIEZ_COLS" value="'.($conf['HOMECATEGORIEZ_COLS'] ? $conf['HOMECATEGORIEZ_COLS'] : '4').'" />
 						<p class="clear">'.$this->l('A number of columns to display on homepage (default: 4).').'</p>
 					</div>
-					<label>'.$this->l('Width adjust for the block of categories').'</label>
+					<label>'.$this->l('Width adjust for the block of categories').'<sup>*</sup></label>
 					<div class="margin-form">
 						<input type="text" size="3" name="HOMECATEGORIEZ_WIDTH_ADJUST" value="'.($conf['HOMECATEGORIEZ_WIDTH_ADJUST'] ? $conf['HOMECATEGORIEZ_WIDTH_ADJUST'] : '0').'" /> px.
 						<p class="clear">'.$this->l('Input a number of pixels to adjust width of the block of categories.').'</p>
 					</div>
+					<label>'.$this->l('* Only for PrestaShop less then 1.6.').'</label>
 					<center><input type="submit" name="submit_save" value="'.$this->l('Save').'" class="button" /></center>
 				</fieldset>
 			</form>
