@@ -27,7 +27,7 @@ class HomeCategoriez extends Module
 	{
 		$this->name = 'homecategoriez';
 		$this->tab = version_compare(_PS_VERSION_, '1.4', '>=') ? 'front_office_features' : 'Tools';
-		$this->version = '1.1.0';
+		$this->version = '1.2.0';
 		$this->author = 'zapalm';
 		$this->need_instance = 0;
 		$this->ps_versions_compliancy = array('min' => '1.3.0.0', 'max' => '1.6.1.0');
