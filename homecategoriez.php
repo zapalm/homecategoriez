@@ -13,12 +13,14 @@ if (!defined('_PS_VERSION_'))
 
 class HomeCategoriez extends Module
 {
+	/** @var bool Assign smarty vars only ones */
 	private static $vars_assigned = false;
 
+	/** @var array Default settings */
 	private $conf_default = array(
 		'HOMECATEGORIEZ_CATALOG' => 1,
 		'HOMECATEGORIEZ_COLS' => 4,
-		'HOMECATEGORIEZ_WIDTH_ADJUST' => 538,	// ширина для блока из 4 колонок для стандартной темы Prestashop
+		'HOMECATEGORIEZ_WIDTH_ADJUST' => 538,
 	);
 
 	public function __construct()
