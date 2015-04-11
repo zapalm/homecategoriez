@@ -1,6 +1,6 @@
 <?php
 /**
- * Home Categories Block: module for PrestaShop 1.3-1.4
+ * Home Categories Block: module for PrestaShop 1.3-1.6
  *
  * @author zapalm <zapalm@ya.ru>
  * @copyright (c) 2012-2015, zapalm
@@ -13,6 +13,8 @@ if (!defined('_PS_VERSION_'))
 
 class HomeCategoriez extends Module
 {
+	private static $vars_assigned = false;
+
 	private $conf_default = array(
 		'HOMECATEGORIEZ_CATALOG' => 1,
 		'HOMECATEGORIEZ_COLS' => 4,
@@ -26,7 +28,7 @@ class HomeCategoriez extends Module
 		$this->version = '1.1.0';
 		$this->author = 'zapalm';
 		$this->need_instance = 0;
-		$this->ps_versions_compliancy = array('min' => '1.3.0.0', 'max' => '1.4.12.0');
+		$this->ps_versions_compliancy = array('min' => '1.3.0.0', 'max' => '1.6.1.0');
 		$this->bootstrap = false;
 
 		parent::__construct();
@@ -40,7 +42,17 @@ class HomeCategoriez extends Module
 		foreach ($this->conf_default as $c => $v)
 			Configuration::updateValue($c, $v);
 
-		return parent::install() && $this->registerHook('home');
+		$res = parent::install();
+
+		if (version_compare(_PS_VERSION_, '1.6', '<'))
+			$res &= $this->registerHook('home');
+		else
+		{
+			$res &= $this->registerHook('displayHomeTab');
+			$res &= $this->registerHook('displayHomeTabContent');
+		}
+
+		return $res;
 	}
 
 	public function uninstall()
@@ -104,28 +116,59 @@ class HomeCategoriez extends Module
 
 	public function hookHome($params)
 	{
-		global $smarty, $link;
+		global $smarty;
 
+		$this->assignCommonVars($params);
 		$conf = Configuration::getMultiple(array_keys($this->conf_default));
-		$categories = Category::getChildren((int)$conf['HOMECATEGORIEZ_CATALOG'], (int)$params['cookie']->id_lang, true);
-
 		$block_width = (int)$conf['HOMECATEGORIEZ_WIDTH_ADJUST'];
 		$nb_items_per_line = (int)$conf['HOMECATEGORIEZ_COLS'];
 		$block_width_adjust = ceil($nb_items_per_line * 2) + 2;
 		$block_content_width = $block_width - $block_width_adjust;
 		$block_li_width = ceil($block_content_width / $nb_items_per_line);
-		$pic_size = 'home';
+		$pic_size_type = 'home';
 
 		$smarty->assign(array(
 			'block_width' => $block_width,
 			'nb_items_per_line' => $nb_items_per_line,
 			'block_li_width' => $block_li_width,
-			'categories' => $categories,
-			'link' => $link,
-			'size_str' => $pic_size,
-			'pic_size' => Image::getSize($pic_size),
+			'pic_size_type' => $pic_size_type,
+			'pic_size' => Image::getSize($pic_size_type),
 		));
 
 		return $this->display(__FILE__, 'homecategoriez.tpl');
+	}
+
+	private function assignCommonVars($params)
+	{
+		global $smarty, $link;
+
+		if (self::$vars_assigned)
+			return;
+
+		$categories = Category::getChildren((int)Configuration::get('HOMECATEGORIEZ_CATALOG'), (int)$params['cookie']->id_lang, true);
+
+		$smarty->assign(array(
+			'categories' => $categories,
+			'link' => $link,
+		));
+
+		self::$vars_assigned = true;
+	}
+
+	public function hookDisplayHomeTabContent($params)
+	{
+		$this->assignCommonVars($params);
+		$pic_size_type = 'category_default';
+
+		$this->smarty->assign(array(
+			'pic_size_type' => $pic_size_type,
+		));
+
+		return $this->display(__FILE__, 'homecategoriez-bootstrap.tpl');
+	}
+
+	public function hookDisplayHomeTab($params)
+	{
+		return $this->display(__FILE__, 'homecategoriez-bootstrap-tab.tpl');
 	}
 }

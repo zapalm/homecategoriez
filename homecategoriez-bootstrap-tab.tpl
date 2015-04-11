@@ -1,0 +1,1 @@
+<li><a data-toggle="tab" href="#homecategoriez" class="homecategoriez">{l s='Categories' mod='homecategoriez'}</a></li>
