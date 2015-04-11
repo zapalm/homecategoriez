@@ -1,6 +1,7 @@
 {if isset($categories) && $categories}
 	{* define number of categories per line for different devices *}
 	{* @todo: add to the module's settings *}
+	{* @todo: rename vars for the norms *}
 	{assign var='nbItemsPerLine' value=4}
 	{assign var='nbItemsPerLineTablet' value=3}
 	{assign var='nbItemsPerLineMobile' value=2}

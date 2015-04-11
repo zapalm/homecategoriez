@@ -1,5 +1,6 @@
 <!-- MODULE homecategoriez -->
 {if $categories}
+{* @todo: move to a css-file *}
 {literal}
 	<STYLE TYPE="text/css">
 	<!--
