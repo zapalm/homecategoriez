@@ -70,7 +70,7 @@ class HomeCategoriez extends Module
 		global $cookie;
 
 		$output = '<h2>'.$this->displayName.'</h2>';
-		
+
 		if (Tools::isSubmit('submit_save'))
 		{
 			$res = 1;
