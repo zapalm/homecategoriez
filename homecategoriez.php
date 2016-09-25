@@ -30,7 +30,6 @@ class HomeCategoriez extends Module
 		$this->version = '1.2.0.1';
 		$this->author = 'zapalm';
 		$this->need_instance = 0;
-		$this->ps_versions_compliancy = array('min' => '1.3.0.0');
 		$this->bootstrap = false;
 
 		parent::__construct();
