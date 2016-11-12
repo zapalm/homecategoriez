@@ -1,3 +1,13 @@
+{**
+* Home Categories Block: module for PrestaShop 1.3-1.6
+*
+* @author    zapalm <zapalm@ya.ru>
+* @copyright (c) 2012-2016, zapalm
+* @link      http://prestashop.modulez.ru/en/frontend-features/31-block-of-categories-on-the-homepage.html The module's homepage
+* @license   http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
+*}
+
+<!-- MODULE homecategoriez -->
 {if isset($categories) && $categories}
     {* define number of categories per line for different devices *}
     {* @todo: add to the module's settings *}
@@ -44,3 +54,4 @@
         <li class="alert alert-info">{l s='No categories' mod='homecategoriez'}</li>
     </ul>
 {/if}
+<!-- /MODULE homecategoriez -->
