@@ -24,7 +24,7 @@
 					<div class="left-block">
 						<div class="product-image-container">
 							<a class="product_img_link" href="{$categoryLink|escape:'html':'UTF-8'}" title="{$category.name|escape:'html':'UTF-8'}">
-								<img class="replace-2x img-responsive" src="{$link->getCatImageLink($category.link_rewrite, $category.id_category, $pic_size_type)|escape:'html':'UTF-8'}" alt="" title="" {if isset($homeSize)} width="{$homeSize.width}" height="{$homeSize.height}"{/if} />
+								<img class="replace-2x img-responsive" src="{$link->getCatImageLink($category.link_rewrite, $category.id_category, $pic_size_type)|escape:'html':'UTF-8'}" alt="{$category.name|escape:'html':'UTF-8'}" {if isset($homeSize)} width="{$homeSize.width}" height="{$homeSize.height}"{/if} />
 							</a>
 						</div>
 					</div>
