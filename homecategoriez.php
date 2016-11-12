@@ -27,7 +27,7 @@ class HomeCategoriez extends Module
     public function __construct() {
         $this->name             = 'homecategoriez';
         $this->tab              = version_compare(_PS_VERSION_, '1.4', '>=') ? 'front_office_features' : 'Tools';
-        $this->version          = '1.2.0.2';
+        $this->version          = '1.2.1.0';
         $this->author           = 'zapalm';
         $this->need_instance    = 0;
         $this->bootstrap        = false;
