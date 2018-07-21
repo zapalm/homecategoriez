@@ -12,6 +12,9 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+/**
+ * @inheritdoc
+ */
 class HomeCategoriez extends Module
 {
     /** @var bool Is smarty vars already assigned */
@@ -24,6 +27,9 @@ class HomeCategoriez extends Module
         'HOMECATEGORIEZ_WIDTH_ADJUST'   => 538,
     );
 
+    /**
+     * @inheritdoc
+     */
     public function __construct() {
         $this->name             = 'homecategoriez';
         $this->tab              = version_compare(_PS_VERSION_, '1.4', '>=') ? 'front_office_features' : 'Tools';
@@ -40,6 +46,9 @@ class HomeCategoriez extends Module
         $this->conf_default['HOMECATEGORIEZ_CATALOG'] = Configuration::get('PS_HOME_CATEGORY');
     }
 
+    /**
+     * @inheritdoc
+     */
     public function install() {
         foreach ($this->conf_default as $c => $v) {
             Configuration::updateValue($c, $v);
@@ -61,6 +70,9 @@ class HomeCategoriez extends Module
         return (bool)$result;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function uninstall() {
         foreach ($this->conf_default as $c => $v) {
             Configuration::deleteByName($c);
@@ -69,6 +81,9 @@ class HomeCategoriez extends Module
         return parent::uninstall();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getContent() {
         global $cookie;
 
@@ -140,10 +155,13 @@ class HomeCategoriez extends Module
         return '<link href="' . $this->_path . 'views/css/' . $cssFile .'" rel="stylesheet">';
     }
 
+    /**
+     * @inheritdoc
+     */
     public function hookHome($params) {
         global $smarty;
 
-        $this->assignCommonVars($params);
+        $this->assignCommonVariables($params);
 
         $conf                   = Configuration::getMultiple(array_keys($this->conf_default));
         $block_width            = (int)$conf['HOMECATEGORIEZ_WIDTH_ADJUST'];
@@ -174,7 +192,12 @@ class HomeCategoriez extends Module
         return $this->display(__FILE__, 'views/templates/' . $templateName);
     }
 
-    private function assignCommonVars($params) {
+    /**
+     * Assign common variables.
+     *
+     * @param array $params Hook params.
+     */
+    private function assignCommonVariables($params) {
         global $smarty, $link;
 
         if (self::$vars_assigned) {
@@ -195,8 +218,12 @@ class HomeCategoriez extends Module
         self::$vars_assigned = true;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function hookDisplayHomeTabContent($params) {
-        $this->assignCommonVars($params);
+        $this->assignCommonVariables($params);
+
         $pic_size_type = 'category_default';
 
         $this->smarty->assign(array(
@@ -206,6 +233,9 @@ class HomeCategoriez extends Module
         return $this->display(__FILE__, 'views/templates/homecategoriez-bootstrap.tpl');
     }
 
+    /**
+     * @inheritdoc
+     */
     public function hookDisplayHomeTab($params) {
         return $this->display(__FILE__, 'views/templates/homecategoriez-bootstrap-tab.tpl');
     }
