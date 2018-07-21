@@ -3,7 +3,7 @@ Categories on the homepage: module for Prestashop
 
 Description
 ------------
-This is a module for [PrestaShop][4] e-commerce solution (v1.3-1.6) that displays categories on the shop's homepage.
+This is a module for [PrestaShop][4] e-commerce solution (v1.3-1.7) that displays categories on the shop's homepage.
 More info: http://prestashop.modulez.ru/en/frontend-features/31-block-of-categories-on-the-homepage.html
 
 Installation & Update

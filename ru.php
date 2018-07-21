@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{homecategoriez}prestashop>homecategoriez-bootstrap-tab_af1b98adf7f686b84cd0b443e022b7a0'] = 'Категории';
-$_MODULE['<{homecategoriez}prestashop>homecategoriez-bootstrap_87bdf2b1731f2c475caf4afc3eae14d0'] = 'Нет категорий';
 $_MODULE['<{homecategoriez}prestashop>homecategoriez_aa752afe21b351109f94ab2f9818f3b3'] = 'Категории на главной';
 $_MODULE['<{homecategoriez}prestashop>homecategoriez_cf51da77895b3efa8222bcbbc21a2ca3'] = 'Отображает категории на главной странице сайта';
 $_MODULE['<{homecategoriez}prestashop>homecategoriez_c888438d14855d7d96a2724ee9c306bd'] = 'Настройки сохранены';
@@ -17,5 +15,9 @@ $_MODULE['<{homecategoriez}prestashop>homecategoriez_1089ea6e4a508669165469b71b7
 $_MODULE['<{homecategoriez}prestashop>homecategoriez_97138b6ee81e6acd49ff0d043141ca25'] = 'Введите число пикселей для подгонки ширины блока категорий';
 $_MODULE['<{homecategoriez}prestashop>homecategoriez_724910191cf651ff7404ce188d09f946'] = '* Только для PrestaShop младше, чем 1.6.';
 $_MODULE['<{homecategoriez}prestashop>homecategoriez_c9cc8cce247e49bae79f15173ce97354'] = 'Сохранить';
-$_MODULE['<{homecategoriez}prestashop>homecategoriez_af1b98adf7f686b84cd0b443e022b7a0'] = 'Категории';
+$_MODULE['<{homecategoriez}prestashop>homecategoriez-boilerplate_3e480dfc32f25db062e28fa513003957'] = 'Популярные категории';
+$_MODULE['<{homecategoriez}prestashop>homecategoriez-boilerplate_87bdf2b1731f2c475caf4afc3eae14d0'] = 'Нет категорий';
+$_MODULE['<{homecategoriez}prestashop>homecategoriez-bootstrap-tab_3e480dfc32f25db062e28fa513003957'] = 'Популярные категории';
+$_MODULE['<{homecategoriez}prestashop>homecategoriez-bootstrap_87bdf2b1731f2c475caf4afc3eae14d0'] = 'Нет категорий';
+$_MODULE['<{homecategoriez}prestashop>homecategoriez_3e480dfc32f25db062e28fa513003957'] = 'Популярные категории';
 $_MODULE['<{homecategoriez}prestashop>homecategoriez_87bdf2b1731f2c475caf4afc3eae14d0'] = 'Нет категорий';

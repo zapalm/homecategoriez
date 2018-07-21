@@ -1,0 +1,31 @@
+#homecategoriez h4 {
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+}
+
+#homecategoriez img {
+    border: 1px solid #D1D1D1;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#homecategoriez .category-title {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 6px 11px;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+#homecategoriez .category-description {
+    text-align: center;
+    height: auto;
+    line-height: 15px;
+}
+
+#homecategoriez .category-description a {
+    font-size: 12px;
+    color: #232323;
+}

@@ -1,9 +1,9 @@
 <?php
 /**
- * Home Categories Block: module for PrestaShop 1.3-1.6
+ * Home Categories Block: module for PrestaShop.
  *
- * @author    zapalm <zapalm@ya.ru>
- * @copyright (c) 2012-2016, zapalm
+ * @author    Maksim T. <zapalm@yandex.com>
+ * @copyright 2012 Maksim T.
  * @link      http://prestashop.modulez.ru/en/frontend-features/31-block-of-categories-on-the-homepage.html The module's homepage
  * @license   http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
  */
@@ -36,6 +36,8 @@ class HomeCategoriez extends Module
 
         $this->displayName = $this->l('Categories on the homepage');
         $this->description = $this->l('Displays categories in the middle of your homepage');
+
+        $this->conf_default['HOMECATEGORIEZ_CATALOG'] = Configuration::get('PS_HOME_CATEGORY');
     }
 
     public function install() {
@@ -43,16 +45,20 @@ class HomeCategoriez extends Module
             Configuration::updateValue($c, $v);
         }
 
-        $res = parent::install();
-
-        if (version_compare(_PS_VERSION_, '1.6', '<')) {
-            $res &= $this->registerHook('home');
-        } else {
-            $res &= $this->registerHook('displayHomeTab');
-            $res &= $this->registerHook('displayHomeTabContent');
+        if (!parent::install()) {
+            return false;
         }
 
-        return $res;
+        $result = $this->registerHook('header');
+
+        if (version_compare(_PS_VERSION_, '1.6', '<') || version_compare(_PS_VERSION_, '1.7', '>=')) {
+            $result &= $this->registerHook('home');
+        } else {
+            $result &= $this->registerHook('displayHomeTab');
+            $result &= $this->registerHook('displayHomeTabContent');
+        }
+
+        return (bool)$result;
     }
 
     public function uninstall() {
@@ -83,7 +89,7 @@ class HomeCategoriez extends Module
         $output     .= '
             <form action="' . $_SERVER['REQUEST_URI'] . '" method="post">
                 <fieldset>
-                    <legend><img src="' . _PS_ADMIN_IMG_ . 'cog.gif" />' . $this->l('Settings') . '</legend>
+                    <legend><img src="' . _PS_ADMIN_IMG_ . 'cog.gif" alt="" />' . $this->l('Settings') . '</legend>
                     <label>' . $this->l('Root category of children categories to display') . '</label>
                     <div class="margin-form">
                         <select name="HOMECATEGORIEZ_CATALOG">
@@ -118,17 +124,39 @@ class HomeCategoriez extends Module
         return $output;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function hookHeader()
+    {
+        if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+            $cssFile = '1.7.css';
+        } elseif (version_compare(_PS_VERSION_, '1.6', '>=')) {
+            $cssFile = '1.6.css';
+        } else {
+            $cssFile = '1.3-1.5.css';
+        }
+
+        return '<link href="' . $this->_path . 'views/css/' . $cssFile .'" rel="stylesheet">';
+    }
+
     public function hookHome($params) {
         global $smarty;
 
         $this->assignCommonVars($params);
+
         $conf                   = Configuration::getMultiple(array_keys($this->conf_default));
         $block_width            = (int)$conf['HOMECATEGORIEZ_WIDTH_ADJUST'];
         $nb_items_per_line      = (int)$conf['HOMECATEGORIEZ_COLS'];
         $block_width_adjust     = ceil($nb_items_per_line * 2) + 2;
         $block_content_width    = $block_width - $block_width_adjust;
         $block_li_width         = ceil($block_content_width / $nb_items_per_line);
-        $pic_size_type          = 'home';
+
+        if (version_compare(_PS_VERSION_, '1.6', '>=')) {
+            $pic_size_type = 'category_default';
+        } else {
+            $pic_size_type = 'home';
+        }
 
         $smarty->assign(array(
             'block_width'       => $block_width,
@@ -138,7 +166,12 @@ class HomeCategoriez extends Module
             'pic_size'          => Image::getSize($pic_size_type),
         ));
 
-        return $this->display(__FILE__, 'homecategoriez.tpl');
+        $templateName = version_compare(_PS_VERSION_, '1.7', '>=')
+            ? 'homecategoriez-boilerplate.tpl'
+            : 'homecategoriez.tpl'
+        ;
+
+        return $this->display(__FILE__, 'views/templates/' . $templateName);
     }
 
     private function assignCommonVars($params) {
@@ -148,7 +181,11 @@ class HomeCategoriez extends Module
             return;
         }
 
-        $categories = Category::getChildren((int)Configuration::get('HOMECATEGORIEZ_CATALOG'), (int)$params['cookie']->id_lang, true);
+        $idLanguage = (int)$params['cookie']->id_lang;
+        $categories = Category::getChildren((int)Configuration::get('HOMECATEGORIEZ_CATALOG'), $idLanguage, true);
+        foreach ($categories as $i => $category) {
+            $categories[$i] = new Category($category['id_category'], $idLanguage);
+        }
 
         $smarty->assign(array(
             'categories'    => $categories,
@@ -166,10 +203,10 @@ class HomeCategoriez extends Module
             'pic_size_type' => $pic_size_type,
         ));
 
-        return $this->display(__FILE__, 'homecategoriez-bootstrap.tpl');
+        return $this->display(__FILE__, 'views/templates/homecategoriez-bootstrap.tpl');
     }
 
     public function hookDisplayHomeTab($params) {
-        return $this->display(__FILE__, 'homecategoriez-bootstrap-tab.tpl');
+        return $this->display(__FILE__, 'views/templates/homecategoriez-bootstrap-tab.tpl');
     }
 }

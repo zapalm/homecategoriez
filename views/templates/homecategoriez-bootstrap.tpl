@@ -1,11 +1,11 @@
 {**
-* Home Categories Block: module for PrestaShop 1.3-1.6
-*
-* @author    zapalm <zapalm@ya.ru>
-* @copyright (c) 2012-2016, zapalm
-* @link      http://prestashop.modulez.ru/en/frontend-features/31-block-of-categories-on-the-homepage.html The module's homepage
-* @license   http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
-*}
+ * Home Categories Block: module for PrestaShop.
+ *
+ * @author    Maksim T. <zapalm@yandex.com>
+ * @copyright 2012 Maksim T.
+ * @link      http://prestashop.modulez.ru/en/frontend-features/31-block-of-categories-on-the-homepage.html The module's homepage
+ * @license   http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
+ *}
 
 <!-- MODULE homecategoriez -->
 {if isset($categories) && $categories}
@@ -28,20 +28,20 @@
             {if $total_items == 0}{assign var='total_items' value=$nbItemsPerLine}{/if}
             {if $total_items_tablet == 0}{assign var='total_items_tablet' value=$nbItemsPerLineTablet}{/if}
             {if $total_items_mobile == 0}{assign var='total_items_mobile' value=$nbItemsPerLineMobile}{/if}
-            {assign var='categoryLink' value=$link->getcategoryLink($category.id_category, $category.link_rewrite)}
+            {assign var='categoryLink' value=$link->getcategoryLink($category->id_category, $category->link_rewrite)}
             <li class="ajax_block_product col-xs-12 col-sm-4 col-md-3 {if $smarty.foreach.homeCategory.iteration%$nbItemsPerLine == 0}last-in-line{elseif $smarty.foreach.homeCategory.iteration%$nbItemsPerLine == 1}first-in-line{/if} {if $smarty.foreach.homeCategory.iteration > ($smarty.foreach.homeCategory.total - $total_items)}last-line{/if} {if $smarty.foreach.homeCategory.iteration%$nbItemsPerLineTablet == 0}last-item-of-tablet-line{elseif $smarty.foreach.homeCategory.iteration%$nbItemsPerLineTablet == 1}first-item-of-tablet-line{/if} {if $smarty.foreach.homeCategory.iteration%$nbItemsPerLineMobile == 0}last-item-of-mobile-line{elseif $smarty.foreach.homeCategory.iteration%$nbItemsPerLineMobile == 1}first-item-of-mobile-line{/if} {if $smarty.foreach.homeCategory.iteration > ($smarty.foreach.homeCategory.total - $total_items_mobile)}last-mobile-line{/if}">
                 <div class="product-container">
                     <div class="left-block">
                         <div class="product-image-container">
-                            <a class="product_img_link" href="{$categoryLink|escape:'html':'UTF-8'}" title="{$category.name|escape:'html':'UTF-8'}">
-                                <img class="replace-2x img-responsive" src="{$link->getCatImageLink($category.link_rewrite, $category.id_category, $pic_size_type)|escape:'html':'UTF-8'}" alt="{$category.name|escape:'html':'UTF-8'}" {if isset($homeSize)} width="{$homeSize.width}" height="{$homeSize.height}"{/if} />
+                            <a class="product_img_link" href="{$categoryLink|escape:'html':'UTF-8'}" title="{$category->name|escape:'html':'UTF-8'}">
+                                <img class="replace-2x img-responsive" src="{$link->getCatImageLink($category->link_rewrite, $category->id_category, $pic_size_type)|escape:'html':'UTF-8'}" alt="{$category->name|escape:'html':'UTF-8'}" {if isset($homeSize)} width="{$homeSize.width}" height="{$homeSize.height}"{/if} />
                             </a>
                         </div>
                     </div>
                     <div class="right-block">
                         <h5>
-                            <a class="product-name" href="{$categoryLink|escape:'html':'UTF-8'}" title="{$category.name|escape:'htmlall':'UTF-8'}">
-                                {$category.name|truncate:42:'...'|escape:'htmlall':'UTF-8'}
+                            <a class="product-name" href="{$categoryLink|escape:'html':'UTF-8'}" title="{$category->name|escape:'htmlall':'UTF-8'}">
+                                {$category->name|truncate:42:'...'|escape:'htmlall':'UTF-8'}
                             </a>
                         </h5>
                     </div>
