@@ -1,0 +1,26 @@
+#center_column .homecategoriez-block h4 {
+
+}
+
+#center_column .homecategoriez-categories h5 {
+    text-align: center;
+}
+
+#center_column .homecategoriez-categories .block_content {
+    background: none;
+}
+
+.homecategoriez-block .block_content {
+    background: none;
+}
+
+#center_column .homecategoriez-categories ul li {
+    border: 1px dashed transparent;
+    background: none;
+    margin-bottom: 45px;
+}
+
+#center_column .homecategoriez-categories ul li:hover {
+    background: none;
+    border: 1px dashed lightgray;
+}

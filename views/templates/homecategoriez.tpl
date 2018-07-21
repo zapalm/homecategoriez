@@ -9,45 +9,14 @@
 
 <!-- MODULE homecategoriez -->
 {if $categories}
-{* @todo: move to a css-file *}
 {literal}
     <STYLE TYPE="text/css">
     <!--
         #center_column {
             {/literal}
-            {* 
-             * the width must be equal to "Block module width adjust" option from the module settings
-             * ширина центральной колонки должна быть такой же, как и та, что задана в настройках модуля
-             *}
+            {* The width must be equal to "Block module width adjust" option from the module settings. *}
             width: {$block_width}px;
             {literal}
-        }
-
-        #center_column .homecategoriez-block h4 {
-
-        }
-
-        #center_column .homecategoriez-categories h5 {
-            text-align: center;
-        }
-
-        #center_column .homecategoriez-categories .block_content {
-            background: none;
-        }
-
-        .homecategoriez-block .block_content {
-            background: none;
-        }
-
-        #center_column .homecategoriez-categories ul li {
-            border: 1px dashed transparent;
-            background: none;
-            margin-bottom: 45px;
-        }
-
-        #center_column .homecategoriez-categories ul li:hover {
-            background: none;
-            border: 1px dashed lightgray;
         }
     -->
     </STYLE>
