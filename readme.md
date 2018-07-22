@@ -3,34 +3,28 @@
 ## Description
 **The module displays categories on the shop's homepage.**
 
-**[Module's homepage][4]** (full description and download).
+**Module's homepage: [prestashop.modulez.ru][4]** (full description and download).
 
 ## Installation & Update
-The module has a normal installation.
+The module has a normal installation and update (as usual, no extra knowledge needed).
 
-To update the module just do this:
- - Click *uninstall* button
- - Remove all files from `/modules/homecategoriez/`
- - Copy new files to the same directory
- - And click *install* button
-
-## Contributing
-Everyone is welcome and even encouraged to contribute with their own improvements.
-
-You may join and:
-* **Become the [patron][5]** to help me work more for supporting and expanding this module.
+## How to help the project grow and get updates
+* **Become the [patron][5]** to help me work more for supporting and improving this module.
 * Report an issue.
 * Translate description of the module and it's interface captions.
 * Give me feedback.
+* Give the star to the project.
 * Contribute to the code.
 
-### Requirements for code contributors
+## Contributing to the code
+
+### Requirements for code contributors 
 
 Contributors **must** follow the following rules:
 
 * **Make your Pull Request on the *dev* branch**, NOT the *master* branch.
 * Do not update the module's version number.
-* Follow [the coding standards][1].
+* Follow [the coding standards][1] and the [commit message norm][2] **(it is not mandatory for this project to add code prefix for a commit message)**.
 
 ### Process in details for code contributors
 
@@ -44,7 +38,7 @@ Contributors wishing to edit a module's files should follow the following proces
 6. Push your changed branch to your fork in your GitHub account.
 7. Create a pull request for your changes **on the *dev* branch** of the module's project. 
    Be sure to follow [the commit message norm][2] in your pull request
-   **(it is not mandatory for this project to add code prefix for a commit comment)**.
+   **(it is not mandatory for this project to add code prefix for a commit message)**.
    If you need help to make a pull request, read the [Github help page about creating pull requests][3].
 8. Wait for the module's maintainer to apply your changes.
 
