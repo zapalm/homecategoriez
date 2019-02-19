@@ -18,6 +18,8 @@ if (false === file_exists(_PS_ROOT_DIR_ . '/vendor/zapalm/prestashopHelpers')) {
 
 /**
  * @inheritdoc
+ *
+ * @author Maksim T. <zapalm@yandex.com>
  */
 class HomeCategoriez extends Module
 {
@@ -33,6 +35,8 @@ class HomeCategoriez extends Module
 
     /**
      * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
      */
     public function __construct() {
         $this->name             = 'homecategoriez';
@@ -52,6 +56,8 @@ class HomeCategoriez extends Module
 
     /**
      * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
      */
     public function install() {
         if (!parent::install()) {
@@ -84,6 +90,8 @@ class HomeCategoriez extends Module
 
     /**
      * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
      */
     public function uninstall() {
         foreach ($this->conf_default as $c => $v) {
@@ -95,6 +103,8 @@ class HomeCategoriez extends Module
 
     /**
      * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
      */
     public function getContent() {
         global $cookie;
@@ -158,6 +168,8 @@ class HomeCategoriez extends Module
 
     /**
      * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
      */
     public function hookHeader()
     {
@@ -174,6 +186,8 @@ class HomeCategoriez extends Module
 
     /**
      * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
      */
     public function hookHome($params) {
         global $smarty;
@@ -213,6 +227,8 @@ class HomeCategoriez extends Module
      * Assign common variables.
      *
      * @param array $params Hook params.
+     *
+     * @author Maksim T. <zapalm@yandex.com>
      */
     private function assignCommonVariables($params) {
         global $smarty, $link;
@@ -237,6 +253,8 @@ class HomeCategoriez extends Module
 
     /**
      * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
      */
     public function hookDisplayHomeTabContent($params) {
         $this->assignCommonVariables($params);
@@ -252,6 +270,8 @@ class HomeCategoriez extends Module
 
     /**
      * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
      */
     public function hookDisplayHomeTab($params) {
         return $this->display(__FILE__, 'views/templates/homecategoriez-bootstrap-tab.tpl');
