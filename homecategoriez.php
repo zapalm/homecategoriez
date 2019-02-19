@@ -54,6 +54,14 @@ class HomeCategoriez extends Module
             return false;
         }
 
+        // The registration in the quality service of ModuleZ LLC website.
+        // This information is need to get usage statistics that will help to improve the module in right way.
+        @file_get_contents('https://prestashop.modulez.ru/scripts/quality-service/index.php?' . http_build_query([
+            'new'  => $this->name . '-' . $this->version,
+            'h'    => Tools::getShopDomain(),
+            'data' => json_encode(['prestashop' => _PS_VERSION_, 'thirtybees' => (defined('_TB_VERSION_') ? _TB_VERSION_ : null), 'email' => Configuration::get('PS_SHOP_EMAIL')], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        ]));
+
         foreach ($this->conf_default as $c => $v) {
             Configuration::updateValue($c, $v);
         }
