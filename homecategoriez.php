@@ -12,6 +12,10 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+if (false === file_exists(_PS_ROOT_DIR_ . '/vendor/zapalm/prestashopHelpers')) {
+    require_once _PS_MODULE_DIR_ . 'homecategoriez/vendor/autoload.php';
+}
+
 /**
  * @inheritdoc
  */
@@ -143,31 +147,11 @@ class HomeCategoriez extends Module
             </form>
         ';
 
-        $modulezUrl = 'https://prestashop.modulez.ru' . (Language::getIsoById($this->context->cookie->id_lang) === 'ru' ? '/ru/' : '/en/');
-        $modulePage = $modulezUrl . '31-block-of-categories-on-the-homepage.html';
-        $output .= // 2018-10-17
-            (version_compare(_PS_VERSION_, '1.6', '<') ? '<br class="clear" />' : '') . '
-            <div class="panel">
-                <div class="panel-heading">
-                    <img src="' . $this->_path . 'logo.png" width="16" height="16"/>
-                    ' . $this->l('Module info') . '
-                </div>
-                <div class="form-wrapper">
-                    <div class="row">               
-                        <div class="form-group col-lg-4" style="display: block; clear: none !important; float: left; width: 33.3%;">
-                            <span><b>' . $this->l('Version') . ':</b> ' . $this->version . '</span><br/>
-                            <span><b>' . $this->l('License') . ':</b> Academic Free License (AFL 3.0)</span><br/>
-                            <span><b>' . $this->l('Website') . ':</b> <a class="link" href="' . $modulePage . '" target="_blank">prestashop.modulez.ru</a></span><br/>
-                            <span><b>' . $this->l('Author') . ':</b> zapalm <img src="' . $this->_path . 'zapalm24x24.jpg" /><br/><br/>
-                        </div>
-                        <div class="form-group col-lg-2" style="display: block; clear: none !important; float: left; width: 16.6%;">
-                            <img width="250" alt="' . $this->l('Website') . '" src="' . $this->_path . 'marketplace-logo.png" />
-                        </div>
-                    </div>
-                </div>
-            </div> ' .
-            (version_compare(_PS_VERSION_, '1.6', '<') ? '<br class="clear" />' : '') . '
-        ';
+        $output .= (new \zapalm\prestashopHelpers\widgets\AboutModuleWidget($this))
+            ->setModuleUri('31-block-of-categories-on-the-homepage.html')
+            ->setLicenseTitle('Academic Free License (AFL 3.0)')
+            ->setLicenseUrl('https://opensource.org/licenses/afl-3.0.php')
+        ;
 
         return $output;
     }
