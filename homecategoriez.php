@@ -116,7 +116,7 @@ class HomeCategoriez extends Module
         $output     .= '
             <form action="' . $_SERVER['REQUEST_URI'] . '" method="post">
                 <fieldset>
-                    <legend><img src="' . _PS_ADMIN_IMG_ . 'cog.gif" alt="" />' . $this->l('Settings') . '</legend>
+                    <legend><img src="' . $this->_path . 'logo.png" width="15" height="16" alt="" />' . $this->l('Settings') . '</legend>
                     <label>' . $this->l('Root category of children categories to display') . '</label>
                     <div class="margin-form">
                         <select name="HOMECATEGORIEZ_CATALOG">
