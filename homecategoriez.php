@@ -28,9 +28,9 @@ class HomeCategoriez extends Module
 
     /** @var array Default settings */
     private $conf_default = array(
-        'HOMECATEGORIEZ_CATALOG'        => 1,
-        'HOMECATEGORIEZ_COLS'           => 4,
-        'HOMECATEGORIEZ_WIDTH_ADJUST'   => 538,
+        'HOMECATEGORIEZ_CATALOG'      => 1,
+        'HOMECATEGORIEZ_COLS'         => 4,
+        'HOMECATEGORIEZ_WIDTH_ADJUST' => 538,
     );
 
     /**
@@ -38,13 +38,14 @@ class HomeCategoriez extends Module
      *
      * @author Maksim T. <zapalm@yandex.com>
      */
-    public function __construct() {
-        $this->name             = 'homecategoriez';
-        $this->tab              = version_compare(_PS_VERSION_, '1.4', '>=') ? 'front_office_features' : 'Tools';
-        $this->version          = '1.4.0';
-        $this->author           = 'zapalm';
-        $this->need_instance    = false;
-        $this->bootstrap        = false;
+    public function __construct()
+    {
+        $this->name          = 'homecategoriez';
+        $this->tab           = version_compare(_PS_VERSION_, '1.4', '>=') ? 'front_office_features' : 'Tools';
+        $this->version       = '1.4.0';
+        $this->author        = 'zapalm';
+        $this->need_instance = false;
+        $this->bootstrap     = false;
 
         parent::__construct();
 
@@ -59,7 +60,8 @@ class HomeCategoriez extends Module
      *
      * @author Maksim T. <zapalm@yandex.com>
      */
-    public function install() {
+    public function install()
+    {
         if (!parent::install()) {
             return false;
         }
@@ -93,7 +95,8 @@ class HomeCategoriez extends Module
      *
      * @author Maksim T. <zapalm@yandex.com>
      */
-    public function uninstall() {
+    public function uninstall()
+    {
         foreach ($this->conf_default as $c => $v) {
             Configuration::deleteByName($c);
         }
@@ -106,7 +109,8 @@ class HomeCategoriez extends Module
      *
      * @author Maksim T. <zapalm@yandex.com>
      */
-    public function getContent() {
+    public function getContent()
+    {
         global $cookie;
 
         $output = '<h2>' . $this->displayName . '</h2>';
@@ -120,9 +124,9 @@ class HomeCategoriez extends Module
             $output .= $res ? $this->displayConfirmation($this->l('Settings updated')) : $this->displayError($this->l('Some setting not updated'));
         }
 
-        $conf        = Configuration::getMultiple(array_keys($this->conf_default));
-        $categories  = Category::getHomeCategories($cookie->id_lang, false);
-        $root_cat    = Category::getRootCategory($cookie->id_lang);
+        $conf       = Configuration::getMultiple(array_keys($this->conf_default));
+        $categories = Category::getHomeCategories($cookie->id_lang, false);
+        $root_cat   = Category::getRootCategory($cookie->id_lang);
         $output     .= '
             <form action="' . $_SERVER['REQUEST_URI'] . '" method="post">
                 <fieldset>
@@ -181,7 +185,7 @@ class HomeCategoriez extends Module
             $cssFile = '1.3-1.5.css';
         }
 
-        return '<link href="' . $this->_path . 'views/css/' . $cssFile .'" rel="stylesheet">';
+        return '<link href="' . $this->_path . 'views/css/' . $cssFile . '" rel="stylesheet">';
     }
 
     /**
@@ -189,17 +193,18 @@ class HomeCategoriez extends Module
      *
      * @author Maksim T. <zapalm@yandex.com>
      */
-    public function hookHome($params) {
+    public function hookHome($params)
+    {
         global $smarty;
 
         $this->assignCommonVariables($params);
 
-        $conf                   = Configuration::getMultiple(array_keys($this->conf_default));
-        $block_width            = (int)$conf['HOMECATEGORIEZ_WIDTH_ADJUST'];
-        $nb_items_per_line      = (int)$conf['HOMECATEGORIEZ_COLS'];
-        $block_width_adjust     = ceil($nb_items_per_line * 2) + 2;
-        $block_content_width    = $block_width - $block_width_adjust;
-        $block_li_width         = ceil($block_content_width / $nb_items_per_line);
+        $conf                = Configuration::getMultiple(array_keys($this->conf_default));
+        $block_width         = (int)$conf['HOMECATEGORIEZ_WIDTH_ADJUST'];
+        $nb_items_per_line   = (int)$conf['HOMECATEGORIEZ_COLS'];
+        $block_width_adjust  = ceil($nb_items_per_line * 2) + 2;
+        $block_content_width = $block_width - $block_width_adjust;
+        $block_li_width      = ceil($block_content_width / $nb_items_per_line);
 
         if (version_compare(_PS_VERSION_, '1.6', '>=')) {
             $pic_size_type = 'category_default';
@@ -230,7 +235,8 @@ class HomeCategoriez extends Module
      *
      * @author Maksim T. <zapalm@yandex.com>
      */
-    private function assignCommonVariables($params) {
+    private function assignCommonVariables($params)
+    {
         global $smarty, $link;
 
         if (self::$vars_assigned) {
@@ -244,8 +250,8 @@ class HomeCategoriez extends Module
         }
 
         $smarty->assign(array(
-            'categories'    => $categories,
-            'link'          => $link,
+            'categories' => $categories,
+            'link'       => $link,
         ));
 
         self::$vars_assigned = true;
@@ -256,7 +262,8 @@ class HomeCategoriez extends Module
      *
      * @author Maksim T. <zapalm@yandex.com>
      */
-    public function hookDisplayHomeTabContent($params) {
+    public function hookDisplayHomeTabContent($params)
+    {
         $this->assignCommonVariables($params);
 
         $pic_size_type = 'category_default';
@@ -273,7 +280,8 @@ class HomeCategoriez extends Module
      *
      * @author Maksim T. <zapalm@yandex.com>
      */
-    public function hookDisplayHomeTab($params) {
+    public function hookDisplayHomeTab($params)
+    {
         return $this->display(__FILE__, 'views/templates/homecategoriez-bootstrap-tab.tpl');
     }
 }
