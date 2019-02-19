@@ -29,7 +29,7 @@
                             src="{$urls.img_cat_url|escape:'html':'UTF-8'}{$language.iso_code|escape:'html':'UTF-8'}.jpg"
                             width="{$pic_size.width}"
                             height="{$pic_size.height}"
-                            title="{l s='No image' mod='tablecombz'}"
+                            title="{l s='No image' mod='homecategoriez'}"
                         >
                     {/if}
                 </a>
