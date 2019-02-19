@@ -50,12 +50,12 @@ class HomeCategoriez extends Module
      * @inheritdoc
      */
     public function install() {
-        foreach ($this->conf_default as $c => $v) {
-            Configuration::updateValue($c, $v);
-        }
-
         if (!parent::install()) {
             return false;
+        }
+
+        foreach ($this->conf_default as $c => $v) {
+            Configuration::updateValue($c, $v);
         }
 
         $result = $this->registerHook('header');
