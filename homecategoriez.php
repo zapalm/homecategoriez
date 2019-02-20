@@ -12,8 +12,14 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+if (false === file_exists(_PS_ROOT_DIR_ . '/vendor/zapalm/prestashopHelpers')) {
+    require_once _PS_MODULE_DIR_ . 'homecategoriez/vendor/autoload.php';
+}
+
 /**
  * @inheritdoc
+ *
+ * @author Maksim T. <zapalm@yandex.com>
  */
 class HomeCategoriez extends Module
 {
@@ -22,21 +28,24 @@ class HomeCategoriez extends Module
 
     /** @var array Default settings */
     private $conf_default = array(
-        'HOMECATEGORIEZ_CATALOG'        => 1,
-        'HOMECATEGORIEZ_COLS'           => 4,
-        'HOMECATEGORIEZ_WIDTH_ADJUST'   => 538,
+        'HOMECATEGORIEZ_CATALOG'      => 1,
+        'HOMECATEGORIEZ_COLS'         => 4,
+        'HOMECATEGORIEZ_WIDTH_ADJUST' => 538,
     );
 
     /**
      * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
      */
-    public function __construct() {
-        $this->name             = 'homecategoriez';
-        $this->tab              = version_compare(_PS_VERSION_, '1.4', '>=') ? 'front_office_features' : 'Tools';
-        $this->version          = '1.4.0';
-        $this->author           = 'zapalm';
-        $this->need_instance    = false;
-        $this->bootstrap        = false;
+    public function __construct()
+    {
+        $this->name          = 'homecategoriez';
+        $this->tab           = version_compare(_PS_VERSION_, '1.4', '>=') ? 'front_office_features' : 'Tools';
+        $this->version       = '1.5.0';
+        $this->author        = 'zapalm';
+        $this->need_instance = false;
+        $this->bootstrap     = false;
 
         parent::__construct();
 
@@ -48,32 +57,47 @@ class HomeCategoriez extends Module
 
     /**
      * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
      */
-    public function install() {
-        foreach ($this->conf_default as $c => $v) {
-            Configuration::updateValue($c, $v);
-        }
-
+    public function install()
+    {
         if (!parent::install()) {
             return false;
         }
 
-        $result = $this->registerHook('header');
+        foreach ($this->conf_default as $c => $v) {
+            Configuration::updateValue($c, $v);
+        }
 
+        $result = $this->registerHook('header');
         if (version_compare(_PS_VERSION_, '1.6', '<') || version_compare(_PS_VERSION_, '1.7', '>=')) {
             $result &= $this->registerHook('home');
         } else {
             $result &= $this->registerHook('displayHomeTab');
             $result &= $this->registerHook('displayHomeTabContent');
         }
+        $result = (bool)$result;
 
-        return (bool)$result;
+        // The information about registration is need to get usage statistics that will help to improve the module in right way.
+        (new \zapalm\prestashopHelpers\components\qualityService\QualityService($this, false))
+            ->setTicketData(array(
+                'new'  => $this->name . '-' . $this->version,
+                'h'    => \zapalm\prestashopHelpers\helpers\UrlHelper::getShopDomain(),
+            ))
+            ->registerModule($result)
+        ;
+
+        return $result;
     }
 
     /**
      * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
      */
-    public function uninstall() {
+    public function uninstall()
+    {
         foreach ($this->conf_default as $c => $v) {
             Configuration::deleteByName($c);
         }
@@ -83,8 +107,11 @@ class HomeCategoriez extends Module
 
     /**
      * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
      */
-    public function getContent() {
+    public function getContent()
+    {
         global $cookie;
 
         $output = '<h2>' . $this->displayName . '</h2>';
@@ -98,13 +125,13 @@ class HomeCategoriez extends Module
             $output .= $res ? $this->displayConfirmation($this->l('Settings updated')) : $this->displayError($this->l('Some setting not updated'));
         }
 
-        $conf        = Configuration::getMultiple(array_keys($this->conf_default));
-        $categories  = Category::getHomeCategories($cookie->id_lang, false);
-        $root_cat    = Category::getRootCategory($cookie->id_lang);
+        $conf       = Configuration::getMultiple(array_keys($this->conf_default));
+        $categories = Category::getHomeCategories($cookie->id_lang, false);
+        $root_cat   = Category::getRootCategory($cookie->id_lang);
         $output     .= '
             <form action="' . $_SERVER['REQUEST_URI'] . '" method="post">
                 <fieldset>
-                    <legend><img src="' . _PS_ADMIN_IMG_ . 'cog.gif" alt="" />' . $this->l('Settings') . '</legend>
+                    <legend><img src="' . $this->_path . 'logo.png" width="15" height="16" alt="" />' . $this->l('Settings') . '</legend>
                     <label>' . $this->l('Root category of children categories to display') . '</label>
                     <div class="margin-form">
                         <select name="HOMECATEGORIEZ_CATALOG">
@@ -135,37 +162,19 @@ class HomeCategoriez extends Module
             </form>
         ';
 
-        $modulezUrl = 'https://prestashop.modulez.ru' . (Language::getIsoById($this->context->cookie->id_lang) === 'ru' ? '/ru/' : '/en/');
-        $modulePage = $modulezUrl . '31-block-of-categories-on-the-homepage.html';
-        $output .= // 2018-10-17
-            (version_compare(_PS_VERSION_, '1.6', '<') ? '<br class="clear" />' : '') . '
-            <div class="panel">
-                <div class="panel-heading">
-                    <img src="' . $this->_path . 'logo.png" width="16" height="16"/>
-                    ' . $this->l('Module info') . '
-                </div>
-                <div class="form-wrapper">
-                    <div class="row">               
-                        <div class="form-group col-lg-4" style="display: block; clear: none !important; float: left; width: 33.3%;">
-                            <span><b>' . $this->l('Version') . ':</b> ' . $this->version . '</span><br/>
-                            <span><b>' . $this->l('License') . ':</b> Academic Free License (AFL 3.0)</span><br/>
-                            <span><b>' . $this->l('Website') . ':</b> <a class="link" href="' . $modulePage . '" target="_blank">prestashop.modulez.ru</a></span><br/>
-                            <span><b>' . $this->l('Author') . ':</b> zapalm <img src="' . $this->_path . 'zapalm24x24.jpg" /><br/><br/>
-                        </div>
-                        <div class="form-group col-lg-2" style="display: block; clear: none !important; float: left; width: 16.6%;">
-                            <img width="250" alt="' . $this->l('Website') . '" src="' . $this->_path . 'marketplace-logo.png" />
-                        </div>
-                    </div>
-                </div>
-            </div> ' .
-            (version_compare(_PS_VERSION_, '1.6', '<') ? '<br class="clear" />' : '') . '
-        ';
+        $output .= (new \zapalm\prestashopHelpers\widgets\AboutModuleWidget($this))
+            ->setModuleUri('31-block-of-categories-on-the-homepage.html')
+            ->setLicenseTitle('Academic Free License (AFL 3.0)')
+            ->setLicenseUrl('https://opensource.org/licenses/afl-3.0.php')
+        ;
 
         return $output;
     }
 
     /**
      * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
      */
     public function hookHeader()
     {
@@ -177,23 +186,26 @@ class HomeCategoriez extends Module
             $cssFile = '1.3-1.5.css';
         }
 
-        return '<link href="' . $this->_path . 'views/css/' . $cssFile .'" rel="stylesheet">';
+        return '<link href="' . $this->_path . 'views/css/' . $cssFile . '" rel="stylesheet">';
     }
 
     /**
      * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
      */
-    public function hookHome($params) {
+    public function hookHome($params)
+    {
         global $smarty;
 
         $this->assignCommonVariables($params);
 
-        $conf                   = Configuration::getMultiple(array_keys($this->conf_default));
-        $block_width            = (int)$conf['HOMECATEGORIEZ_WIDTH_ADJUST'];
-        $nb_items_per_line      = (int)$conf['HOMECATEGORIEZ_COLS'];
-        $block_width_adjust     = ceil($nb_items_per_line * 2) + 2;
-        $block_content_width    = $block_width - $block_width_adjust;
-        $block_li_width         = ceil($block_content_width / $nb_items_per_line);
+        $conf                = Configuration::getMultiple(array_keys($this->conf_default));
+        $block_width         = (int)$conf['HOMECATEGORIEZ_WIDTH_ADJUST'];
+        $nb_items_per_line   = (int)$conf['HOMECATEGORIEZ_COLS'];
+        $block_width_adjust  = ceil($nb_items_per_line * 2) + 2;
+        $block_content_width = $block_width - $block_width_adjust;
+        $block_li_width      = ceil($block_content_width / $nb_items_per_line);
 
         if (version_compare(_PS_VERSION_, '1.6', '>=')) {
             $pic_size_type = 'category_default';
@@ -221,8 +233,11 @@ class HomeCategoriez extends Module
      * Assign common variables.
      *
      * @param array $params Hook params.
+     *
+     * @author Maksim T. <zapalm@yandex.com>
      */
-    private function assignCommonVariables($params) {
+    private function assignCommonVariables($params)
+    {
         global $smarty, $link;
 
         if (self::$vars_assigned) {
@@ -236,8 +251,8 @@ class HomeCategoriez extends Module
         }
 
         $smarty->assign(array(
-            'categories'    => $categories,
-            'link'          => $link,
+            'categories' => $categories,
+            'link'       => $link,
         ));
 
         self::$vars_assigned = true;
@@ -245,8 +260,11 @@ class HomeCategoriez extends Module
 
     /**
      * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
      */
-    public function hookDisplayHomeTabContent($params) {
+    public function hookDisplayHomeTabContent($params)
+    {
         $this->assignCommonVariables($params);
 
         $pic_size_type = 'category_default';
@@ -260,8 +278,11 @@ class HomeCategoriez extends Module
 
     /**
      * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
      */
-    public function hookDisplayHomeTab($params) {
+    public function hookDisplayHomeTab($params)
+    {
         return $this->display(__FILE__, 'views/templates/homecategoriez-bootstrap-tab.tpl');
     }
 }

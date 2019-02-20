@@ -16,6 +16,7 @@ $_MODULE['<{homecategoriez}prestashop>homecategoriez_97138b6ee81e6acd49ff0d04314
 $_MODULE['<{homecategoriez}prestashop>homecategoriez_724910191cf651ff7404ce188d09f946'] = '* Только для PrestaShop младше, чем 1.6.';
 $_MODULE['<{homecategoriez}prestashop>homecategoriez_c9cc8cce247e49bae79f15173ce97354'] = 'Сохранить';
 $_MODULE['<{homecategoriez}prestashop>homecategoriez-boilerplate_3e480dfc32f25db062e28fa513003957'] = 'Популярные категории';
+$_MODULE['<{homecategoriez}prestashop>homecategoriez-boilerplate_9dd7104e68d1b5f994264b9387c9d271'] = 'Нет фото';
 $_MODULE['<{homecategoriez}prestashop>homecategoriez-boilerplate_87bdf2b1731f2c475caf4afc3eae14d0'] = 'Нет категорий';
 $_MODULE['<{homecategoriez}prestashop>homecategoriez-bootstrap-tab_3e480dfc32f25db062e28fa513003957'] = 'Популярные категории';
 $_MODULE['<{homecategoriez}prestashop>homecategoriez-bootstrap_87bdf2b1731f2c475caf4afc3eae14d0'] = 'Нет категорий';

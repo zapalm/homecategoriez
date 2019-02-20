@@ -3,13 +3,14 @@
 ## Description
 **The module displays categories on the shop's homepage.**
 
-**Module's homepage: [prestashop.modulez.ru][4]** (full description and download).
+**The module's home page and the support page: [prestashop.modulez.ru][4]**.
+The full description, how to use and the stable release for download are available there.
 
 ## Installation & Update
 The module has a normal installation and update (as usual, no extra knowledge needed).
 
 ## How to help the project grow and get updates
-* **Become the [patron][5]** to help me work more for supporting and improving this module.
+* **Become the [patron][5]** or support me by **[Flattr][6]** to help me work more for supporting and improving this project.
 * Report an issue.
 * Translate description of the module and it's interface captions.
 * Give me feedback.
@@ -49,3 +50,4 @@ Contributors wishing to edit a module's files should follow the following proces
 [3]: https://help.github.com/articles/using-pull-requests
 [4]: https://prestashop.modulez.ru/en/frontend-features/31-block-of-categories-on-the-homepage.html
 [5]: https://www.patreon.com/zapalm
+[6]: https://flattr.com/@zapalm

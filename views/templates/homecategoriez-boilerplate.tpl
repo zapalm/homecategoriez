@@ -16,7 +16,7 @@
             {assign var='imageLink' value=$link->getCatImageLink($category->link_rewrite, $category->id_category, $pic_size_type)}
             <li class="col-xs-12 col-sm-6 col-lg-2">
                 <a href="{$categoryLink}" title="{$category->name|escape:html:'UTF-8'}">
-                    {if file_exists($smarty.const._PS_CAT_IMG_DIR_|cat:basename($imageLink))}
+                    {if $category->id_image|intval > 0}
                         <img
                             src="{$imageLink}"
                             width="{$pic_size.width}"
@@ -29,7 +29,7 @@
                             src="{$urls.img_cat_url|escape:'html':'UTF-8'}{$language.iso_code|escape:'html':'UTF-8'}.jpg"
                             width="{$pic_size.width}"
                             height="{$pic_size.height}"
-                            title="{l s='No image' mod='tablecombz'}"
+                            title="{l s='No image' mod='homecategoriez'}"
                         >
                     {/if}
                 </a>

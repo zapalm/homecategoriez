@@ -1,0 +1,24 @@
+{
+  "name": "zapalm/homecategoriez",
+  "type": "prestashop-module",
+  "homepage": "https://prestashop.modulez.ru/en/frontend-features/31-block-of-categories-on-the-homepage.html",
+  "authors": [
+    {
+      "name": "Maksim T.",
+      "email": "zapalm@yandex.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5",
+    "zapalm/prestashopHelpers": "dev-master"
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/zapalm/prestashopHelpers"
+    }
+  ],
+  "config": {
+    "preferred-install": "dist"
+  }
+}
