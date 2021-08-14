@@ -26,10 +26,10 @@ class HomeCategoriez extends Module
     /** The internal product ID in the quality service. */
     const QUALITY_SERVICE_PRODUCT_ID = 31;
 
-    /** @var bool Is smarty vars already assigned */
+    /** @var bool Is smarty vars already assigned. */
     private static $vars_assigned = false;
 
-    /** @var array Default settings */
+    /** @var array Default settings. */
     private $conf_default = array(
         'HOMECATEGORIEZ_CATALOG'      => 1,
         'HOMECATEGORIEZ_COLS'         => 4,
