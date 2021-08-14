@@ -10,12 +10,12 @@
   ],
   "require": {
     "php": ">=5.5",
-    "zapalm/prestashopHelpers": "dev-master"
+    "zapalm/prestashop-helpers": "dev-master"
   },
   "repositories": [
     {
       "type": "vcs",
-      "url": "https://github.com/zapalm/prestashopHelpers"
+      "url": "https://github.com/zapalm/prestashop-helpers"
     }
   ],
   "config": {

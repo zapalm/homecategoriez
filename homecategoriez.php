@@ -8,13 +8,13 @@
  * @license   https://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
  */
 
-if (!defined('_PS_VERSION_')) {
+/** @noinspection PhpFullyQualifiedNameUsageInspection */
+
+if (false === defined('_PS_VERSION_')) {
     exit;
 }
 
-if (false === file_exists(_PS_ROOT_DIR_ . '/vendor/zapalm/prestashopHelpers')) {
-    require_once _PS_MODULE_DIR_ . 'homecategoriez/vendor/autoload.php';
-}
+require_once _PS_MODULE_DIR_ . 'homecategoriez/autoload.inc.php';
 
 /**
  * @inheritdoc
@@ -23,6 +23,9 @@ if (false === file_exists(_PS_ROOT_DIR_ . '/vendor/zapalm/prestashopHelpers')) {
  */
 class HomeCategoriez extends Module
 {
+    /** The internal product ID in the quality service. */
+    const QUALITY_SERVICE_PRODUCT_ID = 31;
+
     /** @var bool Is smarty vars already assigned */
     private static $vars_assigned = false;
 
@@ -79,13 +82,8 @@ class HomeCategoriez extends Module
         }
         $result = (bool)$result;
 
-        // The information about registration is need to get usage statistics that will help to improve the module in right way.
-        (new \zapalm\prestashopHelpers\components\qualityService\QualityService($this, false))
-            ->setTicketData(array(
-                'new'  => $this->name . '-' . $this->version,
-                'h'    => \zapalm\prestashopHelpers\helpers\UrlHelper::getShopDomain(),
-            ))
-            ->registerModule($result)
+        (new \zapalm\prestashopHelpers\components\qualityService\QualityServiceClient(self::QUALITY_SERVICE_PRODUCT_ID))
+            ->installModule($this)
         ;
 
         return $result;
@@ -102,7 +100,13 @@ class HomeCategoriez extends Module
             Configuration::deleteByName($c);
         }
 
-        return parent::uninstall();
+        $result = parent::uninstall();
+
+        (new \zapalm\prestashopHelpers\components\qualityService\QualityServiceClient(self::QUALITY_SERVICE_PRODUCT_ID))
+            ->uninstallModule($this)
+        ;
+
+        return $result;
     }
 
     /**
