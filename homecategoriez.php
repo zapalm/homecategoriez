@@ -23,8 +23,8 @@ require_once _PS_MODULE_DIR_ . 'homecategoriez/autoload.inc.php';
  */
 class HomeCategoriez extends Module
 {
-    /** The internal product ID in the quality service. */
-    const QUALITY_SERVICE_PRODUCT_ID = 31;
+    /** The product ID of the module on its homepage. */
+    const HOMEPAGE_PRODUCT_ID = 31;
 
     /** @var bool Is smarty vars already assigned. */
     private static $vars_assigned = false;
@@ -82,7 +82,7 @@ class HomeCategoriez extends Module
         }
         $result = (bool)$result;
 
-        (new \zapalm\prestashopHelpers\components\qualityService\QualityServiceClient(self::QUALITY_SERVICE_PRODUCT_ID))
+        (new \zapalm\prestashopHelpers\components\qualityService\QualityServiceClient(self::HOMEPAGE_PRODUCT_ID))
             ->installModule($this)
         ;
 
@@ -102,7 +102,7 @@ class HomeCategoriez extends Module
 
         $result = parent::uninstall();
 
-        (new \zapalm\prestashopHelpers\components\qualityService\QualityServiceClient(self::QUALITY_SERVICE_PRODUCT_ID))
+        (new \zapalm\prestashopHelpers\components\qualityService\QualityServiceClient(self::HOMEPAGE_PRODUCT_ID))
             ->uninstallModule($this)
         ;
 
