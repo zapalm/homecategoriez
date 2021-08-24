@@ -28,11 +28,11 @@ class HomeCategoriez extends Module
     private static $vars_assigned = false;
 
     /** @var array Default settings. */
-    private $conf_default = array(
+    private $conf_default = [
         'HOMECATEGORIEZ_CATALOG'      => 1,
         'HOMECATEGORIEZ_COLS'         => 4,
         'HOMECATEGORIEZ_WIDTH_ADJUST' => 538,
-    );
+    ];
 
     /**
      * @inheritdoc
@@ -234,13 +234,13 @@ class HomeCategoriez extends Module
             $pic_size_type = 'home';
         }
 
-        $smarty->assign(array(
+        $smarty->assign([
             'block_width'       => $block_width,
             'nb_items_per_line' => $nb_items_per_line,
             'block_li_width'    => $block_li_width,
             'pic_size_type'     => $pic_size_type,
             'pic_size'          => Image::getSize($pic_size_type),
-        ));
+        ]);
 
         $templateName = version_compare(_PS_VERSION_, '1.7', '>=')
             ? 'homecategoriez-boilerplate.tpl'
@@ -271,10 +271,10 @@ class HomeCategoriez extends Module
             $categories[$i] = new Category($category['id_category'], $idLanguage);
         }
 
-        $smarty->assign(array(
+        $smarty->assign([
             'categories' => $categories,
             'link'       => $link,
-        ));
+        ]);
 
         self::$vars_assigned = true;
     }
@@ -290,9 +290,9 @@ class HomeCategoriez extends Module
 
         $pic_size_type = 'category_default';
 
-        $this->smarty->assign(array(
+        $this->smarty->assign([
             'pic_size_type' => $pic_size_type,
-        ));
+        ]);
 
         return $this->display(__FILE__, 'views/templates/homecategoriez-bootstrap.tpl');
     }
