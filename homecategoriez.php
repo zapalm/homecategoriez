@@ -12,8 +12,6 @@ if (false === defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once _PS_MODULE_DIR_ . 'homecategoriez/autoload.inc.php';
-
 /**
  * Module HomeCategoriez.
  *
