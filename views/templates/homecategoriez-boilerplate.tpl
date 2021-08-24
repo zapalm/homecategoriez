@@ -30,6 +30,7 @@
                             width="{$pic_size.width}"
                             height="{$pic_size.height}"
                             title="{l s='No image' mod='homecategoriez'}"
+                            alt=""
                         >
                     {/if}
                 </a>
