@@ -8,8 +8,6 @@
  * @license   https://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
  */
 
-/** @noinspection PhpFullyQualifiedNameUsageInspection */
-
 if (false === defined('_PS_VERSION_')) {
     exit;
 }
@@ -17,7 +15,7 @@ if (false === defined('_PS_VERSION_')) {
 require_once _PS_MODULE_DIR_ . 'homecategoriez/autoload.inc.php';
 
 /**
- * @inheritdoc
+ * Module HomeCategoriez.
  *
  * @author Maksim T. <zapalm@yandex.com>
  */
@@ -65,28 +63,25 @@ class HomeCategoriez extends Module
      */
     public function install()
     {
-        if (!parent::install()) {
-            return false;
+        $result = parent::install();
+
+        if ($result) {
+            foreach ($this->conf_default as $c => $v) {
+                Configuration::updateValue($c, $v);
+            }
+
+            $result &= $this->registerHook('header');
+            if (version_compare(_PS_VERSION_, '1.6', '<') || version_compare(_PS_VERSION_, '1.7', '>=')) {
+                $result &= $this->registerHook('home');
+            } else {
+                $result &= $this->registerHook('displayHomeTab');
+                $result &= $this->registerHook('displayHomeTabContent');
+            }
         }
 
-        foreach ($this->conf_default as $c => $v) {
-            Configuration::updateValue($c, $v);
-        }
+        $this->registerModuleOnQualityService('installation');
 
-        $result = $this->registerHook('header');
-        if (version_compare(_PS_VERSION_, '1.6', '<') || version_compare(_PS_VERSION_, '1.7', '>=')) {
-            $result &= $this->registerHook('home');
-        } else {
-            $result &= $this->registerHook('displayHomeTab');
-            $result &= $this->registerHook('displayHomeTabContent');
-        }
-        $result = (bool)$result;
-
-        (new \zapalm\prestashopHelpers\components\qualityService\QualityServiceClient(self::HOMEPAGE_PRODUCT_ID))
-            ->installModule($this)
-        ;
-
-        return $result;
+        return (bool)$result;
     }
 
     /**
@@ -96,15 +91,15 @@ class HomeCategoriez extends Module
      */
     public function uninstall()
     {
-        foreach ($this->conf_default as $c => $v) {
-            Configuration::deleteByName($c);
+        $result = (bool)parent::uninstall();
+
+        if ($result) {
+            foreach ($this->conf_default as $c => $v) {
+                Configuration::deleteByName($c);
+            }
         }
 
-        $result = parent::uninstall();
-
-        (new \zapalm\prestashopHelpers\components\qualityService\QualityServiceClient(self::HOMEPAGE_PRODUCT_ID))
-            ->uninstallModule($this)
-        ;
+        $this->registerModuleOnQualityService('uninstallation');
 
         return $result;
     }
@@ -118,7 +113,7 @@ class HomeCategoriez extends Module
     {
         global $cookie;
 
-        $output = '<h2>' . $this->displayName . '</h2>';
+        $output = (version_compare(_PS_VERSION_, '1.6', '>=') ? '' : '<h2>' . $this->displayName . '</h2>');
 
         if (Tools::isSubmit('submit_save')) {
             $res = 1;
@@ -166,11 +161,33 @@ class HomeCategoriez extends Module
             </form>
         ';
 
-        $output .= (new \zapalm\prestashopHelpers\widgets\AboutModuleWidget($this))
-            ->setModuleUri('31-block-of-categories-on-the-homepage.html')
-            ->setLicenseTitle('Academic Free License (AFL 3.0)')
-            ->setLicenseUrl('https://opensource.org/licenses/afl-3.0.php')
-        ;
+        // The block about the module (version: 2021-08-19)
+        $modulezUrl    = 'https://prestashop.modulez.ru' . (Language::getIsoById(false === empty($GLOBALS['cookie']->id_lang) ? $GLOBALS['cookie']->id_lang : Context::getContext()->language->id) === 'ru' ? '/ru/' : '/en/');
+        $modulePage    = $modulezUrl . self::HOMEPAGE_PRODUCT_ID . '-' . $this->name . '.html';
+        $licenseTitle  = 'Academic Free License (AFL 3.0)';
+        $output       .=
+            (version_compare(_PS_VERSION_, '1.6', '<') ? '<br class="clear" />' : '') . '
+            <div class="panel">
+                <div class="panel-heading">
+                    <img src="' . $this->_path . 'logo.png" width="16" height="16" alt=""/>
+                    ' . $this->l('Module info') . '
+                </div>
+                <div class="form-wrapper">
+                    <div class="row">               
+                        <div class="form-group col-lg-4" style="display: block; clear: none !important; float: left; width: 33.3%;">
+                            <span><b>' . $this->l('Version') . ':</b> ' . $this->version . '</span><br/>
+                            <span><b>' . $this->l('License') . ':</b> ' . $licenseTitle . '</span><br/>
+                            <span><b>' . $this->l('Website') . ':</b> <a class="link" href="' . $modulePage . '" target="_blank">prestashop.modulez.ru</a></span><br/>
+                            <span><b>' . $this->l('Author') . ':</b> ' . $this->author . '</span><br/><br/>
+                        </div>
+                        <div class="form-group col-lg-2" style="display: block; clear: none !important; float: left; width: 16.6%;">
+                            <img width="250" alt="' . $this->l('Website') . '" src="https://prestashop.modulez.ru/img/marketplace-logo.png" />
+                        </div>
+                    </div>
+                </div>
+            </div> ' .
+            (version_compare(_PS_VERSION_, '1.6', '<') ? '<br class="clear" />' : '') . '
+        ';
 
         return $output;
     }
@@ -288,5 +305,35 @@ class HomeCategoriez extends Module
     public function hookDisplayHomeTab($params)
     {
         return $this->display(__FILE__, 'views/templates/homecategoriez-bootstrap-tab.tpl');
+    }
+
+    /**
+     * Registers current module installation/uninstallation in the quality service.
+     *
+     * This method is needed for a developer to quickly find out about a problem with installing or uninstalling a module.
+     *
+     * @param string $operation The operation. Possible values: installation, uninstallation.
+     *
+     * @author Maksim T. <zapalm@yandex.com>
+     */
+    private function registerModuleOnQualityService($operation)
+    {
+        @file_get_contents('https://prestashop.modulez.ru/scripts/quality-service/index.php?' . http_build_query([
+            'data' => json_encode([
+                'productId'           => self::HOMEPAGE_PRODUCT_ID,
+                'productSymbolicName' => $this->name,
+                'productVersion'      => $this->version,
+                'operation'           => $operation,
+                'status'              => (empty($this->_errors) ? 'success' : 'error'),
+                'message'             => (false === empty($this->_errors) ? strip_tags(stripslashes(implode(' ', (array)$this->_errors))) : ''),
+                'prestashopVersion'   => _PS_VERSION_,
+                'thirtybeesVersion'   => (defined('_TB_VERSION_') ? _TB_VERSION_ : ''),
+                'shopDomain'          => (method_exists('Tools', 'getShopDomain') && Tools::getShopDomain() ? Tools::getShopDomain() : (Configuration::get('PS_SHOP_DOMAIN') ? Configuration::get('PS_SHOP_DOMAIN') : Tools::getHttpHost())),
+                'shopEmail'           => Configuration::get('PS_SHOP_EMAIL'), // This public e-mail from a shop's contacts can be used by a developer to send only an urgent information about security issue of a module!
+                'phpVersion'          => PHP_VERSION,
+                'ioncubeVersion'      => (function_exists('ioncube_loader_iversion') ? ioncube_loader_iversion() : ''),
+                'languageIsoCode'     => Language::getIsoById(false === empty($GLOBALS['cookie']->id_lang) ? $GLOBALS['cookie']->id_lang : Context::getContext()->language->id),
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        ]));
     }
 }
