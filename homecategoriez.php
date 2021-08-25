@@ -27,9 +27,12 @@ class HomeCategoriez extends Module
 
     /** @var array Default settings. */
     private $conf_default = [
-        'HOMECATEGORIEZ_CATALOG'      => 1,
-        'HOMECATEGORIEZ_COLS'         => 4,
-        'HOMECATEGORIEZ_WIDTH_ADJUST' => 538,
+        'HOMECATEGORIEZ_CATALOG'      => '',
+        'HOMECATEGORIEZ_IMAGE_TYPE'   => '',
+        'HOMECATEGORIEZ_LIMIT'        => '6',
+        'HOMECATEGORIEZ_SHUFFLE'      => '0',
+        'HOMECATEGORIEZ_COLS'         => '4',
+        'HOMECATEGORIEZ_WIDTH_ADJUST' => '538',
     ];
 
     /**
@@ -51,7 +54,7 @@ class HomeCategoriez extends Module
         $this->displayName = $this->l('Categories on the homepage');
         $this->description = $this->l('Displays categories in the middle of your homepage');
 
-        $this->conf_default['HOMECATEGORIEZ_CATALOG'] = Configuration::get('PS_HOME_CATEGORY');
+        $this->renewConfiguration();
     }
 
     /**
@@ -116,7 +119,7 @@ class HomeCategoriez extends Module
         if (Tools::isSubmit('submit_save')) {
             $res = 1;
             foreach ($this->conf_default as $k => $v) {
-                $res &= Configuration::updateValue($k, (int)Tools::getValue($k));
+                $res &= Configuration::updateValue($k, Tools::getValue($k));
             }
 
             $output .= $res ? $this->displayConfirmation($this->l('Settings updated')) : $this->displayError($this->l('Some setting not updated'));
@@ -125,6 +128,8 @@ class HomeCategoriez extends Module
         $conf       = Configuration::getMultiple(array_keys($this->conf_default));
         $categories = Category::getHomeCategories($cookie->id_lang, false);
         $root_cat   = Category::getRootCategory($cookie->id_lang);
+        $imageTypes = ImageType::getImagesTypes('categories', true);
+
         $output     .= '
             <form action="' . $_SERVER['REQUEST_URI'] . '" method="post">
                 <fieldset>
@@ -140,17 +145,37 @@ class HomeCategoriez extends Module
                         </select>
                         <p class="clear">' . $this->l('Choose a root category (default : Home category).') . '</p>
                     </div>
-                    <label>' . $this->l('Number of columns to display') . '<sup>*</sup></label>
+                    <label>' . $this->l('Image size') . '</label>
                     <div class="margin-form">
-                        <input type="text" size="1" name="HOMECATEGORIEZ_COLS" value="' . ($conf['HOMECATEGORIEZ_COLS'] ? $conf['HOMECATEGORIEZ_COLS'] : '4') . '" />
-                        <p class="clear">' . $this->l('A number of columns to display on homepage (default: 4).') . '</p>
+                        <select name="HOMECATEGORIEZ_IMAGE_TYPE">';
+                            foreach ($imageTypes as $v) {
+                                $output .= '<option value="' . $v['name'] . '"' . ($conf['HOMECATEGORIEZ_IMAGE_TYPE'] === $v['name'] ? ' selected="selected"' : '') . '>' . $v['name'] . '</option>';
+                            }
+                            $output .= '
+                        </select>
+                        <p class="clear">' . $this->l('See the configuration in "Design / Image settings" for PS 1.7 or in "Preferences / Images" for older versions.') . '</p>
                     </div>
-                    <label>' . $this->l('Width adjust for the block of categories') . '<sup>*</sup></label>
+                    <label>' . $this->l('The number of categories to display') . '</label>
                     <div class="margin-form">
-                        <input type="text" size="3" name="HOMECATEGORIEZ_WIDTH_ADJUST" value="' . ($conf['HOMECATEGORIEZ_WIDTH_ADJUST'] ? $conf['HOMECATEGORIEZ_WIDTH_ADJUST'] : '0') . '" /> px.
-                        <p class="clear">' . $this->l('Input a number of pixels to adjust width of the block of categories.') . '</p>
+                        <input type="text" size="1" name="HOMECATEGORIEZ_LIMIT" value="' . $conf['HOMECATEGORIEZ_LIMIT'] . '" />
+                        <p class="clear">' . $this->l('The number of categories to display on homepage.')  . ' ' . sprintf($this->l('Default: %s.'), $this->conf_default['HOMECATEGORIEZ_LIMIT']) . '</p>
                     </div>
-                    <label>' . $this->l('* Only for PrestaShop less then 1.6.') . '</label>
+                    <label>' . $this->l('Shuffle categories') . '</label>
+                    <div class="margin-form">
+                        <input type="checkbox" name="HOMECATEGORIEZ_SHUFFLE" value="1" ' . ($conf['HOMECATEGORIEZ_SHUFFLE'] ? 'checked="checked"' : '') . '>
+                        <p class="clear">' . $this->l('Check it if you want categories to be shuffled.') . '</p>
+                    </div>
+                    <label><sup style="color: red;">*</sup> ' . $this->l('The number of columns to display') . '</label>
+                    <div class="margin-form">
+                        <input type="text" size="1" name="HOMECATEGORIEZ_COLS" value="' . $conf['HOMECATEGORIEZ_COLS'] . '" />
+                        <p class="clear">' . $this->l('The number of columns to display on homepage.') . ' ' . sprintf($this->l('Default: %s.'), $this->conf_default['HOMECATEGORIEZ_COLS']) . '</p>
+                    </div>
+                    <label><sup style="color: red;">*</sup> ' . $this->l('Width adjust for the block of categories') . '</label>
+                    <div class="margin-form">
+                        <input type="text" size="3" name="HOMECATEGORIEZ_WIDTH_ADJUST" value="' . $conf['HOMECATEGORIEZ_WIDTH_ADJUST'] . '" /> px.
+                        <p class="clear">' . $this->l('Input a number of pixels to adjust width of the block of categories.') . ' ' . sprintf($this->l('Default: %s.'), $this->conf_default['HOMECATEGORIEZ_WIDTH_ADJUST']) . '</p>
+                    </div>
+                    <label><span style="color: red;">*</span> &mdash; ' . $this->l('These options are only for PrestaShop 1.5, 1.4 and 1.3.') . '</label>
                     <br class="clear" />
                     <div class="margin-form">
                         <input type="submit" name="submit_save" value="' . $this->l('Save') . '" class="button" />
@@ -215,30 +240,7 @@ class HomeCategoriez extends Module
      */
     public function hookHome($params)
     {
-        global $smarty;
-
         $this->assignCommonVariables($params);
-
-        $conf                = Configuration::getMultiple(array_keys($this->conf_default));
-        $block_width         = (int)$conf['HOMECATEGORIEZ_WIDTH_ADJUST'];
-        $nb_items_per_line   = (int)$conf['HOMECATEGORIEZ_COLS'];
-        $block_width_adjust  = ceil($nb_items_per_line * 2) + 2;
-        $block_content_width = $block_width - $block_width_adjust;
-        $block_li_width      = ceil($block_content_width / $nb_items_per_line);
-
-        if (version_compare(_PS_VERSION_, '1.6', '>=')) {
-            $pic_size_type = 'category_default';
-        } else {
-            $pic_size_type = 'home';
-        }
-
-        $smarty->assign([
-            'block_width'       => $block_width,
-            'nb_items_per_line' => $nb_items_per_line,
-            'block_li_width'    => $block_li_width,
-            'pic_size_type'     => $pic_size_type,
-            'pic_size'          => Image::getSize($pic_size_type),
-        ]);
 
         $templateName = version_compare(_PS_VERSION_, '1.7', '>=')
             ? 'homecategoriez-boilerplate.tpl'
@@ -269,9 +271,31 @@ class HomeCategoriez extends Module
             $categories[$i] = new Category($category['id_category'], $idLanguage);
         }
 
+        if (Configuration::get('HOMECATEGORIEZ_SHUFFLE')) {
+            shuffle($categories);
+        }
+
+        $limit = (int)Configuration::get('HOMECATEGORIEZ_LIMIT');
+        if ($limit > 0) {
+            $categories = array_splice($categories, 0, $limit);
+        }
+
+        $conf                = Configuration::getMultiple(array_keys($this->conf_default));
+        $block_width         = (int)$conf['HOMECATEGORIEZ_WIDTH_ADJUST'];
+        $nb_items_per_line   = (int)$conf['HOMECATEGORIEZ_COLS'];
+        $pic_size_type       = $conf['HOMECATEGORIEZ_IMAGE_TYPE'];
+        $block_width_adjust  = ceil($nb_items_per_line * 2) + 2;
+        $block_content_width = $block_width - $block_width_adjust;
+        $block_li_width      = ceil($block_content_width / $nb_items_per_line);
+
         $smarty->assign([
-            'categories' => $categories,
-            'link'       => $link,
+            'categories'        => $categories,
+            'link'              => $link,
+            'block_width'       => $block_width,
+            'nb_items_per_line' => $nb_items_per_line,
+            'block_li_width'    => $block_li_width,
+            'pic_size_type'     => $pic_size_type,
+            'pic_size'          => Image::getSize($pic_size_type),
         ]);
 
         self::$vars_assigned = true;
@@ -286,12 +310,6 @@ class HomeCategoriez extends Module
     {
         $this->assignCommonVariables($params);
 
-        $pic_size_type = 'category_default';
-
-        $this->smarty->assign([
-            'pic_size_type' => $pic_size_type,
-        ]);
-
         return $this->display(__FILE__, 'views/templates/homecategoriez-bootstrap.tpl');
     }
 
@@ -303,6 +321,36 @@ class HomeCategoriez extends Module
     public function hookDisplayHomeTab($params)
     {
         return $this->display(__FILE__, 'views/templates/homecategoriez-bootstrap-tab.tpl');
+    }
+
+    /**
+     * Updates the module configuration.
+     *
+     * The advantage of the method is not to make a migration script in a case when just added a new option, which has a default value or not.
+     *
+     * @author Maksim T. <zapalm@yandex.com>
+     */
+    private function renewConfiguration()
+    {
+        if ($this->active) {
+            foreach (array_keys($this->conf_default) as $settingName) {
+                $settingValue = (string)Configuration::get($settingName);
+                if ('' === $settingValue) {
+                    if ('HOMECATEGORIEZ_CATALOG' === $settingName) {
+                        $settingValue = (Configuration::get('PS_HOME_CATEGORY') ? Configuration::get('PS_HOME_CATEGORY') : 1);
+                        Configuration::updateValue($settingName, $settingValue);
+                    } elseif ('HOMECATEGORIEZ_IMAGE_TYPE' === $settingName) {
+                        $imageTypes = ImageType::getImagesTypes('categories', true);
+                        $imageType  = array_pop($imageTypes);
+                        if (is_array($imageType)) {
+                            Configuration::updateValue($settingName, $imageType['name']);
+                        }
+                    } else {
+                        Configuration::updateValue($settingName, $this->conf_default[$settingName]);
+                    }
+                }
+            }
+        }
     }
 
     /**
