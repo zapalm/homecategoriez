@@ -14,7 +14,7 @@
         {foreach from=$categories item=category name=homeCategory}
             {assign var='categoryLink' value=$link->getcategoryLink($category->id_category, $category->link_rewrite)}
             {assign var='imageLink' value=$link->getCatImageLink($category->link_rewrite, $category->id_category, $pic_size_type)}
-            <li class="col-xs-12 col-sm-6 col-lg-2">
+            <li class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
                 <a href="{$categoryLink}" title="{$category->name|escape:html:'UTF-8'}">
                     {if $category->id_image|intval > 0}
                         <img
