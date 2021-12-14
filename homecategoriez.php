@@ -196,7 +196,7 @@ class HomeCategoriez extends Module
                     ' . $this->l('Module info') . '
                 </div>
                 <div class="form-wrapper">
-                    <div class="row">               
+                    <div class="row">
                         <div class="form-group col-lg-4" style="display: block; clear: none !important; float: left; width: 33.3%;">
                             <span><b>' . $this->l('Version') . ':</b> ' . $this->version . '</span><br/>
                             <span><b>' . $this->l('License') . ':</b> ' . $licenseTitle . '</span><br/>
@@ -271,6 +271,8 @@ class HomeCategoriez extends Module
             $categories[$i] = new Category($category['id_category'], $idLanguage);
         }
 
+        $rootCategory = new Category((int)Configuration::get('HOMECATEGORIEZ_CATALOG'), $idLanguage);
+
         if (Configuration::get('HOMECATEGORIEZ_SHUFFLE')) {
             shuffle($categories);
         }
@@ -289,6 +291,7 @@ class HomeCategoriez extends Module
         $block_li_width      = ceil($block_content_width / $nb_items_per_line);
 
         $smarty->assign([
+            'rootCategory'      => $rootCategory,
             'categories'        => $categories,
             'link'              => $link,
             'block_width'       => $block_width,
