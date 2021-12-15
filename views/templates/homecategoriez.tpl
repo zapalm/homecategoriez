@@ -39,6 +39,7 @@
                             background-repeat: no-repeat;
                             background-size: {$pic_size.width}px {$pic_size.height}px;
                             width: {$block_li_width-4}px;
+                            min-height: {$pic_size.height}px;
                         "
                     >
                     </a>
