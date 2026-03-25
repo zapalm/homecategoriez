@@ -33,11 +33,11 @@ Contributors wishing to edit the project's files should follow the following pro
 5. Change the files in your branch. Be sure to follow [the coding standards][2].
 6. Push your changed branch to your fork in your GitHub account.
 7. Create a pull request for your changes **on the *dev* branch** of the project.
-   If you need help to make a pull request, read the [Github help page about creating pull requests][3].
+   If you need help to make a pull request, read the [GitHub help page about creating pull requests][3].
 8. Wait for the maintainer to apply your changes.
 
 **Do not hesitate to create a pull request if even it's hard for you to apply the coding standards.**
 
 [1]: https://prestashop.modulez.ru/en/frontend-features/31-categories-on-the-homepage.html
-[2]: https://doc.prestashop.com/display/PS16/Coding+Standards
-[3]: https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests
+[2]: https://docs.prestashop-project.org/1-6-documentation/english-documentation/developer-guide/coding-standards
+[3]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests
